@@ -5,12 +5,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return '✅ Growth Updater is Live! Visit /run-script to trigger it.'
+    return "Hello, World!"
 
 @app.route('/run-script')
 def run_script():
     try:
-        result = subprocess.run(['python3', 'growth_update.py'], capture_output=True, text=True)
-        return f"<pre>{result.stdout}</pre><br><pre>{result.stderr}</pre>"
-    except Exception as e:
-        return f"❌ Error running script: {e}"
+        output = subprocess.check_output(["python3", "growth_update.py"], stderr=subprocess.STDOUT)
+        return f"<pre>{output.decode()}</pre>"
+    except subprocess.CalledProcessError as e:
+        return f"<pre>Error:\n{e.output.decode()}</pre>", 500
